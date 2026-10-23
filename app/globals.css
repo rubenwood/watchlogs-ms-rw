@@ -47,6 +47,8 @@ body {
 
 .wl-header h1 {
   font-size: 2.25rem;
+  font-weight: 700 !important;
+  color: var(--wl-watch);
   letter-spacing: -0.02em;
   margin: 0;
 }
