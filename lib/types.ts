@@ -3,7 +3,7 @@ export type ListStatus = "watch" | "watched";
 
 export interface MediaItem {
   id: number;
-  type: MediaType;
+  mediaType: MediaType;
   title: string;
   year: string;
   poster: string | null;
@@ -16,4 +16,16 @@ export interface LoggedItem extends MediaItem {
 }
 
 // movie and tv ids can collide on TMDB, so key on both
-export const itemKey = (i: Pick<MediaItem, "id" | "type">) => `${i.type}-${i.id}`;
+export const itemKey = (i: Pick<MediaItem, "id" | "mediaType">) => `${i.mediaType}-${i.id}`;
+
+
+
+export type WatchlistRow = {
+  id:string;
+  created_at:string;
+  user_id:string;
+  tmdb_id: number;
+  media_type: MediaType;
+  media_title: string;
+  list_status: ListStatus;
+};

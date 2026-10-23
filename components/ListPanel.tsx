@@ -47,7 +47,7 @@ export default function ListPanel({ items, onMove, onRemove }: Props) {
               )}
               <div className="wl-row-text">
                 <strong>{i.title}</strong>
-                <span>{i.type === "tv" ? "Show" : "Movie"}{i.year && `, ${i.year}`}</span>
+                <span>{i.mediaType === "tv" ? "Show" : "Movie"}{i.year && `, ${i.year}`}</span>
               </div>
               <button className="wl-link" onClick={() => onMove(i, other)}>
                 {tab === "watch" ? "Mark watched" : "Move to watch"}

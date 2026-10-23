@@ -19,7 +19,7 @@ export default function MediaCard({ item, status, onToggle }: Props) {
       <div className="wl-body">
         <h3>{item.title}</h3>
         <p className="wl-meta">
-          {item.type === "tv" ? "Show" : "Movie"}
+          {item.mediaType === "tv" ? "Show" : "Movie"}
           {item.year && `, ${item.year}`}
         </p>
         {item.overview && <p className="wl-overview">{item.overview}</p>}

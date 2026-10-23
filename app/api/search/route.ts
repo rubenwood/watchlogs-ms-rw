@@ -20,9 +20,9 @@ export async function GET(req: NextRequest) {
   const data = await res.json();
   const results: MediaItem[] = (data.results ?? [])
     .filter((r: any) => r.media_type === "movie" || r.media_type === "tv")
-    .map((r: any) => ({
+    .map((r: any): MediaItem => ({
       id: r.id,
-      type: r.media_type,
+      mediaType: r.media_type,
       title: r.title ?? r.name ?? "Untitled",
       year: (r.release_date ?? r.first_air_date ?? "").slice(0, 4),
       poster: r.poster_path ? `https://image.tmdb.org/t/p/w185${r.poster_path}` : null,
