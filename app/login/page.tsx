@@ -27,13 +27,18 @@ export default function LoginPage() {
     setError('Check your email to confirm your account.')
   }
 
-  return (
-    <form onSubmit={handleLogin}>
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-      <button type="submit">Log in</button>
-      <button type="button" onClick={handleSignUp}>Sign up</button>
-      {error && <p>{error}</p>}
-    </form>
-  )
+    return (
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--wl-bg)' }}>
+        <form className="wl-card-form" onSubmit={handleLogin}>
+
+        <input className="wl-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+        <input className="wl-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+
+        <button className="wl-btn-primary" type="submit">Log in</button>
+        <button className="wl-btn-secondary" type="button" onClick={handleSignUp}>Sign up</button>
+
+        {error && <p className="wl-error">{error}</p>}
+        </form>
+    </div>
+    )
 }

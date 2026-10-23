@@ -154,6 +154,62 @@ body {
   border-radius: 10px;
 }
 
+/* Login form */
+.wl-card-form {
+  @apply flex flex-col w-full max-w-sm mx-auto p-8 gap-4 rounded-2xl border shadow-xl;
+  background-color: var(--wl-surface);
+  border-color: var(--wl-line);
+  color: var(--wl-ink);
+}
+
+.wl-title {
+  @apply text-2xl font-bold text-center;
+  color: var(--wl-ink);
+}
+
+.wl-input {
+  @apply w-full px-4 py-2.5 rounded-lg border transition focus:outline-none;
+  background-color: var(--wl-bg);
+  border-color: var(--wl-line);
+  color: var(--wl-ink);
+}
+.wl-input::placeholder {
+  color: var(--wl-muted);
+}
+.wl-input:focus {
+  border-color: var(--wl-watched);
+  box-shadow: 0 0 0 3px var(--wl-watched-bg);
+  background-color: var(--wl-surface);
+}
+
+.wl-btn-primary {
+  @apply w-full py-2.5 rounded-lg font-semibold transition active:scale-[0.98];
+  background-color: var(--wl-watched);
+  color: var(--wl-surface);
+}
+.wl-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.wl-btn-secondary {
+  @apply w-full py-2.5 rounded-lg border font-medium transition active:scale-[0.98];
+  border-color: var(--wl-line);
+  color: var(--wl-ink);
+  background-color: transparent;
+}
+.wl-btn-secondary:hover {
+  background-color: var(--wl-bg);
+}
+
+.wl-error {
+  @apply text-sm rounded-lg px-3 py-2 border;
+  color: var(--wl-watch);
+  background-color: var(--wl-watch-bg);
+  border-color: var(--wl-watch);
+}
+/* end login form */
+
+
 .wl-poster {
   width: 92px;
   height: 138px;
