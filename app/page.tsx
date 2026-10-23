@@ -107,15 +107,12 @@ export default function Home() {
     return items.find((i) => itemKey(i) === itemKey(m))?.status;
   }
 
-  // Add, move between lists, or remove (if already in that list)
-  async function toggle(m: MediaItem, status: ListStatus) {
-    const snapshot = items;
+  // Add to a list or move between lists. Never removes.
+  async function setStatus(m: MediaItem, status: ListStatus) {
     const existing = items.find((i) => itemKey(i) === itemKey(m));
+    if (existing?.status === status) return; // already there, nothing to do
 
-    // Same list again -> remove
-    if (existing?.status === status) return remove(m);
-
-    // Optimistic update
+    const snapshot = items;
     setItems(
       existing
         ? items.map((i) => (i === existing ? { ...i, status } : i))
@@ -123,7 +120,6 @@ export default function Home() {
     );
 
     try {
-      console.log(itemToBody(m, status), m);
       const res = await fetch("/api/db/watchlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -137,6 +133,10 @@ export default function Home() {
     }
   }
 
+  // Search result buttons: click the active one again to remove
+  function toggle(m: MediaItem, status: ListStatus) {
+    return statusOf(m) === status ? remove(m) : setStatus(m, status);
+  }
   async function remove(m: MediaItem) {
     const snapshot = items;
     setItems(items.filter((i) => itemKey(i) !== itemKey(m))); // optimistic
@@ -175,7 +175,7 @@ export default function Home() {
           />
         </div>
         <aside className="wl-side">
-          <ListPanel items={items} onMove={(i, s) => toggle(i, s)} onRemove={remove} />
+          <ListPanel items={items} onMove={setStatus} onRemove={remove} />
         </aside>
       </div>
     </main>
