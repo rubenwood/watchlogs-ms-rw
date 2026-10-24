@@ -10,6 +10,8 @@
   --wl-watch-bg: #fdf0dc;
   --wl-watched: #0f766e;
   --wl-watched-bg: #d9f2ee;
+  --wl-wont: #b42318;
+  --wl-wont-bg: #fde8e6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +25,8 @@
     --wl-watch-bg: #3a2c18;
     --wl-watched: #5fd0c4;
     --wl-watched-bg: #123a37;
+    --wl-wont: #f97066;
+    --wl-wont-bg: #3d1a17;
   }
 }
 
@@ -401,4 +405,239 @@ body {
 
 .wl-danger:hover {
   color: #c0392b;
+}
+
+/* swipe */
+.wl-tone-watch { --tone: var(--wl-watch); --tone-bg: var(--wl-watch-bg); }
+.wl-tone-watched,
+.wl-tone-will { --tone: var(--wl-watched); --tone-bg: var(--wl-watched-bg); }
+.wl-tone-wont { --tone: var(--wl-wont); --tone-bg: var(--wl-wont-bg); }
+
+.wl-swipe-page {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  box-sizing: border-box;
+}
+
+.wl-swipe-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.wl-swipe-home {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--wl-watch);
+  text-decoration: none;
+}
+
+.wl-swipe-nav {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--wl-surface);
+  border: 1px solid var(--wl-line);
+  border-radius: 999px;
+}
+
+.wl-swipe-nav a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--wl-muted);
+  text-decoration: none;
+}
+
+.wl-swipe-nav a:hover {
+  color: var(--wl-ink);
+}
+
+.wl-swipe-nav a[aria-current="page"] {
+  background: var(--wl-ink);
+  color: var(--wl-surface);
+}
+
+.wl-swipe-intro h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.wl-swipe-intro p {
+  margin: 4px 0 16px;
+  color: var(--wl-muted);
+}
+
+.wl-swipe-error {
+  margin-bottom: 16px;
+}
+
+.wl-swipe-status {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--wl-muted);
+}
+
+.wl-deck {
+  --deck-w: min(100%, 360px, calc(64vh * 2 / 3));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.wl-deck-stack {
+  position: relative;
+  width: var(--deck-w);
+  aspect-ratio: 2 / 3;
+}
+
+.wl-swipe-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--wl-surface);
+  border: 1px solid var(--wl-line);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.18);
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.wl-swipe-card.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.wl-swipe-card--next {
+  transform: scale(0.95) translateY(12px);
+  pointer-events: none;
+}
+
+.wl-swipe-poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--wl-line);
+}
+
+.wl-swipe-info {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 56px 18px 18px;
+  color: #fff;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.92) 35%, rgb(0 0 0 / 0.55) 75%, transparent);
+}
+
+.wl-swipe-info h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.wl-swipe-meta {
+  margin: 2px 0 6px;
+  font-size: 0.88rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.wl-swipe-overview {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wl-stamp {
+  position: absolute;
+  top: 20px;
+  padding: 6px 12px;
+  border: 3px solid var(--tone);
+  border-radius: 8px;
+  background: var(--wl-surface);
+  color: var(--tone);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+/* stamps sit on the side the card is moving away from */
+.wl-stamp-right {
+  left: 18px;
+  transform: rotate(-12deg);
+}
+
+.wl-stamp-left {
+  right: 18px;
+  transform: rotate(12deg);
+}
+
+.wl-deck-actions {
+  display: flex;
+  gap: 10px;
+  width: max(var(--deck-w), 300px);
+  max-width: 100%;
+}
+
+.wl-swipe-btn {
+  flex: 1;
+  padding: 12px 10px;
+  border-radius: 12px;
+  border: 2px solid var(--tone);
+  background: var(--tone-bg);
+  color: var(--tone);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wl-swipe-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.wl-swipe-btn:focus-visible,
+.wl-swipe-nav a:focus-visible {
+  outline: 3px solid var(--wl-watched);
+  outline-offset: 2px;
+}
+
+.wl-swipe-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.wl-swipe-undo {
+  flex: 0 0 auto;
+  border-color: var(--wl-line);
+  background: transparent;
+  color: var(--wl-muted);
+  font-weight: 600;
+}
+
+.wl-deck-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--wl-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wl-swipe-card {
+    transition-duration: 1ms;
+  }
 }

@@ -1,5 +1,7 @@
 export type MediaType = "movie" | "tv";
 export type ListStatus = "watch" | "watched";
+// Sub-sort of the "watch" (haven't seen) list; null until decided
+export type WatchIntent = "will" | "wont";
 
 export interface MediaItem {
   id: number;
@@ -28,4 +30,5 @@ export type WatchlistRow = {
   media_type: MediaType;
   media_title: string;
   list_status: ListStatus;
+  watch_intent?: WatchIntent | null;
 };

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { MediaItem } from "@/lib/types";
+import { toMediaItem } from "@/lib/tmdb";
 
 // Requires TMDB_API_KEY in .env.local (free key from themoviedb.org)
 export async function GET(req: NextRequest) {
@@ -20,14 +21,7 @@ export async function GET(req: NextRequest) {
   const data = await res.json();
   const results: MediaItem[] = (data.results ?? [])
     .filter((r: any) => r.media_type === "movie" || r.media_type === "tv")
-    .map((r: any): MediaItem => ({
-      id: r.id,
-      mediaType: r.media_type,
-      title: r.title ?? r.name ?? "Untitled",
-      year: (r.release_date ?? r.first_air_date ?? "").slice(0, 4),
-      poster: r.poster_path ? `https://image.tmdb.org/t/p/w185${r.poster_path}` : null,
-      overview: r.overview ?? "",
-    }));
+    .map((r: any) => toMediaItem(r, r.media_type));
 
   return NextResponse.json({ results });
 }
