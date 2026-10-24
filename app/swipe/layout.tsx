@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SwipeNav from "@/components/SwipeNav";
+import TopBar from "@/components/TopBar";
 
 export const metadata: Metadata = {
   title: "Swipe · Watchlogs",
@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 
 export default function SwipeLayout({ children }: LayoutProps<"/swipe">) {
   return (
-    <main className="wl-swipe-page">
-      <SwipeNav />
-      {children}
-    </main>
+    <>
+      <TopBar />
+      <main className="wl-swipe-page">{children}</main>
+    </>
   );
 }

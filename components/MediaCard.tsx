@@ -14,7 +14,7 @@ export default function MediaCard({ item, status, onToggle }: Props) {
         // eslint-disable-next-line @next/next/no-img-element
         <img src={item.poster} alt="" className="wl-poster" loading="lazy" />
       ) : (
-        <div className="wl-poster wl-noposter" aria-hidden="true">No poster</div>
+        <div className="wl-poster wl-noposter" aria-hidden="true">{item.mediaType === "tv" ? "TV" : "Film"}</div>
       )}
       <div className="wl-body">
         <h3>{item.title}</h3>

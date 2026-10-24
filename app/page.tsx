@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
+import TopBar from "@/components/TopBar";
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import ListPanel from "@/components/ListPanel";
+import PopularNow from "@/components/PopularNow";
 import { itemKey, type ListStatus, type LoggedItem, type MediaItem, type WatchlistRow } from "@/lib/types";
 
 
@@ -16,6 +17,7 @@ function rowToItem(r: WatchlistRow): LoggedItem {
     mediaType: r.media_type,
     title: r.media_title,
     status: r.list_status,
+    intent: r.watch_intent,
     addedAt: new Date(r.created_at).getTime(),
   } as LoggedItem;
 }
@@ -32,9 +34,6 @@ function itemToBody(m: MediaItem, status: ListStatus) {
 export default function Home() {
   const router = useRouter();
 
-  const supabase = useMemo(() => createClient(), []);
-  const [user, setUser] = useState<User | null>(null);
-
   // search state
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<MediaItem[]>([]);
@@ -43,21 +42,6 @@ export default function Home() {
 
   // list state
   const [items, setItems] = useState<LoggedItem[]>([]);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // keeps it in sync on login/logout/token refresh
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase]);
-
 
   // Load the user's lists from the API on mount
   useEffect(() => {
@@ -155,29 +139,56 @@ export default function Home() {
     }
   }
 
-  return (
-    <main className="wl-page">
-      <header className="wl-header">
-        <h1>Watchlogs</h1>
-        <p>Keep track of what you want to see and what you've seen.</p>
-        {user != null ? <p>Logged in as: {user.email}</p> : <p></p>}
-      </header>
+  const toWatch = items.filter((i) => i.status === "watch");
+  const unsorted = toWatch.filter((i) => !i.intent).length;
 
-      <div className="wl-layout">
-        <div className="wl-main">
-          <SearchBar value={query} onChange={setQuery} loading={loading} />
-          <SearchResults
-            query={query}
-            results={results}
-            error={error}
-            statusOf={statusOf}
-            onToggle={toggle}
-          />
+  return (
+    <>
+      <TopBar />
+      <main className="wl-page">
+        <div className="wl-layout">
+          <div className="wl-main">
+            <h1 className="wl-title">Lists</h1>
+            <SearchBar value={query} onChange={setQuery} loading={loading} />
+            <SearchResults
+              query={query}
+              results={results}
+              error={error}
+              statusOf={statusOf}
+              onToggle={toggle}
+              idle={
+                <div className="wl-idle">
+                  {unsorted > 0 && (
+                    <div className="wl-sortrow">
+                      <div>
+                        <strong>
+                          {unsorted} of {toWatch.length} on your To watch list {unsorted === 1 ? "isn't" : "aren't"} sorted yet
+                        </strong>
+                        <div
+                          className="wl-meter"
+                          role="img"
+                          aria-label={`${toWatch.length - unsorted} of ${toWatch.length} sorted`}
+                        >
+                          <span style={{ width: `${((toWatch.length - unsorted) / toWatch.length) * 100}%` }} />
+                        </div>
+                        <span className="wl-meter-ends">
+                          <span>{toWatch.length - unsorted} sorted</span>
+                          <span>{toWatch.length}</span>
+                        </span>
+                      </div>
+                      <Link href="/swipe/unseen" className="wl-btn wl-btn-link">Sort to-watch</Link>
+                    </div>
+                  )}
+                  <PopularNow isLogged={(m) => statusOf(m) !== undefined} onPick={(m) => setQuery(m.title)} />
+                </div>
+              }
+            />
+          </div>
+          <aside className="wl-side">
+            <ListPanel items={items} onMove={setStatus} onRemove={remove} />
+          </aside>
         </div>
-        <aside className="wl-side">
-          <ListPanel items={items} onMove={setStatus} onRemove={remove} />
-        </aside>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

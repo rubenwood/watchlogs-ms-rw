@@ -2,10 +2,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import NextUp from "@/components/NextUp";
 import SwipeDeck, { type Side } from "@/components/SwipeDeck";
 import { itemKey, type MediaItem, type WatchIntent, type WatchlistRow } from "@/lib/types";
 
-const PREFETCH = 3; // load posters for this many upcoming cards
+const PREFETCH = 6; // load posters for the top card and the five under it in Next up
 
 const rowKey = (r: WatchlistRow) => itemKey({ id: r.tmdb_id, mediaType: r.media_type });
 
@@ -98,10 +99,22 @@ export default function UnseenPage() {
     <>
       <div className="wl-swipe-intro">
         <h1>Will you watch it?</h1>
-        <p>
-          Sorting your &ldquo;haven&apos;t seen&rdquo; list.{" "}
-          {rows && `${queue.length} left · ${count("will")} will watch · ${count("wont")} won't watch`}
-        </p>
+        <p>Sorting the titles on your To watch list into the ones you&apos;ll get to and the ones you won&apos;t.</p>
+        <dl className="wl-tally">
+          <div>
+            <dt>Left to sort</dt>
+            <dd>{rows ? queue.length : "–"}</dd>
+          </div>
+          <div>
+            <dt>Will watch</dt>
+            <dd className="wl-tally-will">{rows ? count("will") : "–"}</dd>
+          </div>
+          <div>
+            <dt>Won&apos;t watch</dt>
+            <dd>{rows ? count("wont") : "–"}</dd>
+          </div>
+        </dl>
+        <NextUp items={items.slice(1, 6)} />
       </div>
       {error && <p className="wl-error wl-swipe-error" role="alert">{error}</p>}
       <SwipeDeck

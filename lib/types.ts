@@ -15,6 +15,7 @@ export interface MediaItem {
 export interface LoggedItem extends MediaItem {
   status: ListStatus;
   addedAt: number;
+  intent?: WatchIntent | null;
 }
 
 // movie and tv ids can collide on TMDB, so key on both

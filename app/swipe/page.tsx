@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import NextUp from "@/components/NextUp";
 import SwipeDeck, { type Side } from "@/components/SwipeDeck";
 import { itemKey, type ListStatus, type MediaItem, type WatchlistRow } from "@/lib/types";
 
@@ -105,7 +106,18 @@ export default function SwipePage() {
     <>
       <div className="wl-swipe-intro">
         <h1>Seen it?</h1>
-        <p>Swipe right if you&apos;ve seen it, left if you haven&apos;t.</p>
+        <p>Popular films and shows you haven&apos;t logged yet, one card at a time.</p>
+        <dl className="wl-key">
+          <div>
+            <dt>Swipe right</dt>
+            <dd>Seen it. Goes on your Watched list.</dd>
+          </div>
+          <div>
+            <dt>Swipe left</dt>
+            <dd>Haven&apos;t seen it. Goes on your To watch list.</dd>
+          </div>
+        </dl>
+        <NextUp items={queue.slice(1, 6)} />
       </div>
       {error && <p className="wl-error wl-swipe-error" role="alert">{error}</p>}
       <SwipeDeck

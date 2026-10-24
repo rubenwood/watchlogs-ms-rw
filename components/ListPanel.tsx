@@ -26,7 +26,8 @@ export default function ListPanel({ items, onMove, onRemove }: Props) {
             className={`wl-tab wl-tab-${s}`}
             onClick={() => setTab(s)}
           >
-            {s === "watch" ? "To watch" : "Watched"} <span>{count(s)}</span>
+            <span className="wl-tab-label">{s === "watch" ? "To watch" : "Watched"}</span>
+            <span className="wl-tab-count">{count(s)}</span>
           </button>
         ))}
       </div>
@@ -43,18 +44,20 @@ export default function ListPanel({ items, onMove, onRemove }: Props) {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={i.poster} alt="" />
               ) : (
-                <div className="wl-noposter-sm" aria-hidden="true" />
+                <div className="wl-noposter-sm" aria-hidden="true">{i.mediaType === "tv" ? "TV" : "Film"}</div>
               )}
               <div className="wl-row-text">
                 <strong>{i.title}</strong>
                 <span>{i.mediaType === "tv" ? "Show" : "Movie"}{i.year && `, ${i.year}`}</span>
               </div>
-              <button className="wl-link" onClick={() => onMove(i, other)}>
-                {tab === "watch" ? "Mark watched" : "Move to watch"}
-              </button>
-              <button className="wl-link wl-danger" onClick={() => onRemove(i)} aria-label={`Remove ${i.title}`}>
-                Remove
-              </button>
+              <div className="wl-row-actions">
+                <button className="wl-link" onClick={() => onMove(i, other)}>
+                  {tab === "watch" ? "Mark watched" : "Move to watch"}
+                </button>
+                <button className="wl-link wl-danger" onClick={() => onRemove(i)} aria-label={`Remove ${i.title}`}>
+                  Remove
+                </button>
+              </div>
             </li>
           ))}
         </ul>
